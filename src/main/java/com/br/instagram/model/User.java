@@ -1,9 +1,14 @@
 package com.br.instagram.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import com.sun.istack.NotNull;
 
@@ -20,9 +25,13 @@ public class User {
 	@NotNull
 	@Column
 	private String userName;
-	
+
+	@OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY)
+	private List<FollowedUser> Followers = new ArrayList<>();
+
 	public Long getId() {
 		return id;
+
 	}
 
 	public void setId(Long id) {
@@ -43,6 +52,14 @@ public class User {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public List<FollowedUser> getFollowers() {
+		return Followers;
+	}
+
+	public void setFollowers(List<FollowedUser> followers) {
+		Followers = followers;
 	}
 
 	@Override
@@ -69,5 +86,5 @@ public class User {
 			return false;
 		return true;
 	}
-	
+
 }
