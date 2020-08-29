@@ -2,6 +2,8 @@ package com.br.instagram.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -91,6 +93,7 @@ public class UserController {
 		 	followUserId (usuário seguido) então haverá um conflito pois não 
 		 	faz sentido uma pessoa seguir outra mais de uma vez.	   
 		*/
+		
 		if (followedUserRepository.findAll()
 				.stream()
 					//verifica se um usuário que segue já existe ...
@@ -112,12 +115,17 @@ public class UserController {
 			
 			followedUserRepository.save(followedUser);
 			
-			//quando um usuário é seguido ele ganha (obviamente ele ganha um seguidor (FollowerUser))
-			//por isso followUserOptional.get() será o usuário que seguidor e 
-			//userToBeFollowedOptional.get().getId() é id do usuário a ser seguido ou que foi seguido
-			//AO AVALIADOR QUE ESTIVER LENDO ESSE CÓDIGO SAIBA ESSA
-			//RELAÇÃO UM PRA MUITOS ENTRE User e FollowerUser/FollowedUser FOI O QUE
-			//ME DEU MAIS TRABALHO.
+			/*
+			
+				Quando um usuário é seguido ele ganha (obviamente ele ganha um seguidor (FollowerUser))
+				por isso followUserOptional.get() será o usuário que seguidor e 
+				userToBeFollowedOptional.get().getId() é id do usuário a ser seguido ou que foi seguido
+				AO AVALIADOR QUE ESTIVER LENDO ESSE CÓDIGO SAIBA ESSA
+				RELAÇÃO UM PRA MUITOS ENTRE User e FollowerUser/FollowedUser FOI O QUE
+				ME DEU MAIS TRABALHO.
+			  
+			*/
+			
 			addFollow(followUserOptional.get(), userToBeFollowedOptional.get().getId());
 			
 		}
@@ -133,5 +141,33 @@ public class UserController {
 		
 		followerUserRepository.save(followerUser);
 	}
+	
+	//Ver os seguidores de um usuário a partir do Id
+	@GetMapping("/following/{followerUserId}")
+	public ResponseEntity<?> following(@PathVariable Long followerUserId){
+		
+		//Retorna a lista de seguidos do usuário de id followerUserId(seguidor). As PoessiaS que ele segue
+		List<FollowedUser> followedUsers = followedUserRepository.findAll()
+				.stream()
+					.filter(fu -> fu.getFollowedUser().getId() == followerUserId)
+				.collect(Collectors.toList());
+		
+		//extrair oS ids das pessoas seguidas 
+		Set<Long> followingIDs = followedUsers
+				.stream()
+					.map(fu -> fu.getUserWhoWillBeAFollowerId())
+				.collect(Collectors.toSet());
+		
+		//comparar os ids com os de todos os usuário PARA retornar apenas os usuários que tenham id igual ao presente no Set followingIDs
+		//outra solução usar a operação contains de followingIDs para user de allUsers em um predicade
+		List<User> following = userRepository.findAll()
+				.stream()
+					.filter((u) -> followingIDs.contains(u.getId()))
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(following );
+		
+	}
+
 	
 }
