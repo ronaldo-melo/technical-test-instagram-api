@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import com.sun.istack.NotNull;
 
+@Entity
 public class User {
 
 	@Id
@@ -28,6 +30,9 @@ public class User {
 
 	@OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY)
 	private List<FollowedUser> Followers = new ArrayList<>();
+
+	@OneToMany(mappedBy = "followerUser", fetch = FetchType.LAZY)
+	private List<FollowerUser> following = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -60,6 +65,14 @@ public class User {
 
 	public void setFollowers(List<FollowedUser> followers) {
 		Followers = followers;
+	}
+
+	public List<FollowerUser> getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(List<FollowerUser> following) {
+		this.following = following;
 	}
 
 	@Override
