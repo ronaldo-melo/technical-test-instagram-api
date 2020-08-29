@@ -198,4 +198,6 @@ public class UserController {
 		
 	}
 
+	//ver informações de perfil de um usuário (nome, nome de usuáio, total de seguidores, total de seguidos) 
+	
 }
