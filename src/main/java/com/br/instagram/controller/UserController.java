@@ -31,9 +31,11 @@ public class UserController {
 
 	@Autowired
 	private UserRepositoty userRepository;
-
+	
+	@Autowired
 	private FollowedUserRepository followedUserRepository;
 	
+	@Autowired
 	private FollowerUserRepository followerUserRepository;
 	
 	@GetMapping
@@ -169,5 +171,31 @@ public class UserController {
 		
 	}
 
-	
+	//ver os seguidores de um usuário
+	@GetMapping("/followers/{followingUserId}")
+	public ResponseEntity<?> followers(@PathVariable Long followingUserId){
+		
+		//Retorna a lista de seguidos do usuário de id followerUserId(seguidor). As PoessiaS que ele segue
+		List<FollowerUser> followersUsers = followerUserRepository.findAll()
+				.stream()
+					.filter(fu -> fu.getFollowerUser().getId() == followingUserId)
+				.collect(Collectors.toList());
+		
+		//extrair oS ids das pessoas seguidas 
+		Set<Long> followingIDs = followersUsers
+				.stream()
+					.map(fu -> fu.getFollowerUserId())
+				.collect(Collectors.toSet());
+		
+		//comparar os ids com os de todos os usuário PARA retornar apenas os usuários que tenham id igual
+		//ao presente no Set followingIDs
+		List<User> following = userRepository.findAll()
+				.stream()
+					.filter((u) -> followingIDs.contains(u.getId()))
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(following );
+		
+	}
+
 }
