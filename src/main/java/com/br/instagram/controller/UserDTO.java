@@ -42,15 +42,15 @@ public class UserDTO {
 
 	public void addFollowerUserDTO(List<FollowerUser> followers) {
 
-		followers.forEach(f -> followedsDTO
-				.add(new FollowedUserDTO(f.getFollowerUser().getName(), f.getFollowerUser().getUserName())));
+		followers.forEach(f -> followersDTO
+				.add(new FollowerUserDTO(f.getFollowerUser().getName(), f.getFollowerUser().getUserName())));
 
 	}
 
-	public void addFollowedUserDTO(List<FollowedUser> followers) {
+	public void addFollowedUserDTO(List<FollowedUser> followeds) {
 
-		followers.forEach(f -> followersDTO
-				.add(new FollowerUserDTO(f.getFollowedUser().getName(), f.getFollowedUser().getUserName())));
+		followeds.forEach(f -> followedsDTO
+				.add(new FollowedUserDTO(f.getFollowedUser().getName(), f.getFollowedUser().getUserName())));
 
 	}
 
