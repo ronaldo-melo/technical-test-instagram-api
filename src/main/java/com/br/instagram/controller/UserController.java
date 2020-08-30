@@ -199,5 +199,18 @@ public class UserController {
 	}
 
 	//ver informações de perfil de um usuário (nome, nome de usuáio, total de seguidores, total de seguidos) 
-	
+	@GetMapping(value = "user-profile/{userId}")
+	public ResponseEntity<UserDTO> userProfile(@PathVariable Long userId){
+		
+		Optional<User> userOptional = userRepository.findById(userId);
+		
+		if(userOptional.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		User user = userOptional.get();
+		
+		UserDTO userDTO = new UserDTO(user);
+		
+		return ResponseEntity.ok(userDTO);
+	}
 }
