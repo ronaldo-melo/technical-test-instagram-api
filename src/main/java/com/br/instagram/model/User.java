@@ -41,6 +41,10 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Publication> publications = new ArrayList<>();
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Commentary> comments = new ArrayList<>();
+
 	public Long getId() {
 		return id;
 
@@ -88,6 +92,14 @@ public class User {
 
 	public void setPublications(List<Publication> publications) {
 		this.publications = publications;
+	}
+
+	public List<Commentary> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Commentary> comments) {
+		this.comments = comments;
 	}
 
 	@Override
