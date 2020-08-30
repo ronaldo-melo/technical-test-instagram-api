@@ -1,12 +1,12 @@
-package com.br.instagram.controller;
+package com.br.instagram.dto;
 
-public class FollowerUserDTO {
+public class FollowedUserDTO {
 	
 	private String name;
 	
 	private String userName;
 	
-	public FollowerUserDTO(String name, String userName) {	
+	public FollowedUserDTO(String name, String userName) {	
 		this.name = name;
 		this.userName = userName;
 	}
@@ -26,5 +26,6 @@ public class FollowerUserDTO {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+	
 	
 }

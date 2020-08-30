@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.instagram.dto.UserDTO;
 import com.br.instagram.model.FollowedUser;
 import com.br.instagram.model.FollowerUser;
 import com.br.instagram.model.User;
