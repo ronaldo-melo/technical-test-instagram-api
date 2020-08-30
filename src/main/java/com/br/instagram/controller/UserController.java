@@ -209,12 +209,22 @@ public class UserController {
 
 	@PatchMapping(value = "/unfollow/{userId}/{unfollowUserId}")
 	public ResponseEntity<?> unfollowUser(@PathVariable Long userId, @PathVariable Long unfollowUserId) {
-
+		
+		Optional<User> userOptional = userRepository.findById(userId);
+		
+		if(userOptional.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		
 		Optional <FollowedUser> unfollowID = followedUserRepository.findAll()
 				.stream()
 					.filter(x -> x.getUserWhoWillBeAFollowerId() == unfollowUserId)
 					.findAny();
 
+		if(unfollowID .isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
+		
 		Long id = unfollowID.get().getId();
 		
 		followedUserRepository.deleteById(id);
