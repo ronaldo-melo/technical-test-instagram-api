@@ -5,14 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Commentary {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@ManyToOne
+	@JoinColumn(nullable = false, name = "publication_id")
+	private Publication publication;
+
 	@Column
 	private String content;
 
@@ -31,7 +37,5 @@ public class Commentary {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
-	
-	
+
 }
