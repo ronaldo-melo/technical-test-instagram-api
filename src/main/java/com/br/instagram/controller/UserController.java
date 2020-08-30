@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.br.instagram.dto.UserDTO;
 import com.br.instagram.model.FollowedUser;
 import com.br.instagram.model.FollowerUser;
+import com.br.instagram.model.Publication;
 import com.br.instagram.model.User;
 import com.br.instagram.repository.FollowedUserRepository;
 import com.br.instagram.repository.FollowerUserRepository;
+import com.br.instagram.repository.PublicationRepository;
 import com.br.instagram.repository.UserRepositoty;
 
 @RestController
@@ -40,6 +42,9 @@ public class UserController {
 	@Autowired
 	private FollowerUserRepository followerUserRepository;
 
+	@Autowired
+	private PublicationRepository publicationRepository;
+	
 	@GetMapping
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -230,5 +235,22 @@ public class UserController {
 		followedUserRepository.deleteById(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping(value = "/publication")
+	public ResponseEntity<?> unfollowUser(@RequestBody Publication publication){
+		
+		Optional<User> userOptional = userRepository.findById(publication.getUser().getId());
+		
+		if(userOptional.isEmpty()) {
+			return ResponseEntity.ok().build();
+		}
+		
+		publication = publicationRepository.save(publication);
+		
+		publication.setUser(userOptional.get());
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(publication);
+		
 	}
 }
