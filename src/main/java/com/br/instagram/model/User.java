@@ -28,14 +28,18 @@ public class User {
 	@NotNull
 	@Column
 	private String userName;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY)
 	private List<FollowedUser> followers = new ArrayList<>();
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "followerUser", fetch = FetchType.LAZY)
 	private List<FollowerUser> following = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private List<Publication> publications = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -76,6 +80,14 @@ public class User {
 
 	public void setFollowing(List<FollowerUser> following) {
 		this.following = following;
+	}
+
+	public List<Publication> getPublications() {
+		return publications;
+	}
+
+	public void setPublications(List<Publication> publications) {
+		this.publications = publications;
 	}
 
 	@Override
