@@ -3,8 +3,6 @@ package com.br.instagram.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.br.instagram.model.FollowedUser;
-import com.br.instagram.model.FollowerUser;
 import com.br.instagram.model.User;
 
 public class UserDTO {
@@ -13,15 +11,21 @@ public class UserDTO {
 
 	private String userName;
 
-	private List<FollowedUserDTO> followedsDTO = new ArrayList<>();
+	private Integer followeds;
 
-	private List<FollowerUserDTO> followersDTO = new ArrayList<>();
+	private Integer followers;
 
-	public UserDTO(User user) {
+	private List<FollowedUserDTO> followedsList = new ArrayList<>();
+
+	private List<FollowerUserDTO> followersList = new ArrayList<>();
+
+	public UserDTO(User user, List<User> followeds, List<User> followers) {
 		this.name = user.getName();
 		this.userName = user.getUserName();
-		addFollowerUserDTO(user.getFollowing());
-		addFollowedUserDTO(user.getFollowers());
+		addFollowerUserDTO(followers);
+		addFollowedUserDTO(followeds);
+		this.followeds = followeds.size();
+		this.followers = followers.size();
 	}
 
 	public String getName() {
@@ -40,17 +44,47 @@ public class UserDTO {
 		this.userName = userName;
 	}
 
-	public void addFollowerUserDTO(List<FollowerUser> followers) {
+	public Integer getFolloweds() {
+		return followeds;
+	}
 
-		followers.forEach(f -> followersDTO
-				.add(new FollowerUserDTO(f.getFollowerUser().getName(), f.getFollowerUser().getUserName())));
+	public void setFolloweds(Integer followeds) {
+		this.followeds = followeds;
+	}
+
+	public Integer getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Integer followers) {
+		this.followers = followers;
+	}
+
+	public List<FollowedUserDTO> getFollowedsList() {
+		return followedsList;
+	}
+
+	public void setFollowedsList(List<FollowedUserDTO> followedsList) {
+		this.followedsList = followedsList;
+	}
+
+	public List<FollowerUserDTO> getFollowersList() {
+		return followersList;
+	}
+
+	public void setFollowersList(List<FollowerUserDTO> followersList) {
+		this.followersList = followersList;
+	}
+
+	public void addFollowerUserDTO(List<User> userFollowers) {
+
+		userFollowers.forEach(f -> followersList.add(new FollowerUserDTO(f.getName(), f.getUserName())));
 
 	}
 
-	public void addFollowedUserDTO(List<FollowedUser> followeds) {
+	public void addFollowedUserDTO(List<User> fuserFolloweds) {
 
-		followeds.forEach(f -> followedsDTO
-				.add(new FollowedUserDTO(f.getFollowedUser().getName(), f.getFollowedUser().getUserName())));
+		fuserFolloweds.forEach(f -> followedsList.add(new FollowedUserDTO(f.getName(), f.getUserName())));
 
 	}
 

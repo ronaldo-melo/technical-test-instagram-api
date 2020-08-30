@@ -147,7 +147,7 @@ public class UserController {
 	
 	//Ver os seguidores de um usuário a partir do Id
 	@GetMapping("/following/{followerUserId}")
-	public ResponseEntity<?> following(@PathVariable Long followerUserId){
+	public List<User> following(@PathVariable Long followerUserId){
 		
 		//Retorna a lista de seguidos do usuário de id followerUserId(seguidor). As PoessiaS que ele segue
 		List<FollowedUser> followedUsers = followedUserRepository.findAll()
@@ -168,15 +168,15 @@ public class UserController {
 					.filter((u) -> followingIDs.contains(u.getId()))
 				.collect(Collectors.toList());
 		
-		return ResponseEntity.ok(following );
+		return following;
 		
 	}
 
 	//ver os seguidores de um usuário
 	@GetMapping("/followers/{followingUserId}")
-	public ResponseEntity<?> followers(@PathVariable Long followingUserId){
+	public List<User> followers(@PathVariable Long followingUserId){
 		
-		//Retorna a lista de seguidos do usuário de id followerUserId(seguidor). As PoessiaS que ele segue
+		//Retorna a lista de seguidos do usuário de id followerUserId(seguidor). As pessoas que ele segue
 		List<FollowerUser> followersUsers = followerUserRepository.findAll()
 				.stream()
 					.filter(fu -> fu.getFollowerUser().getId() == followingUserId)
@@ -195,13 +195,13 @@ public class UserController {
 					.filter((u) -> followingIDs.contains(u.getId()))
 				.collect(Collectors.toList());
 		
-		return ResponseEntity.ok(following );
+		return following;
 		
 	}
 
 	//ver informações de perfil de um usuário (nome, nome de usuáio, total de seguidores, total de seguidos) 
-	@GetMapping(value = "user-profile/{userId}")
-	public ResponseEntity<UserDTO> userProfile(@PathVariable Long userId){
+	@GetMapping(value = "profile/{userId}")
+	public ResponseEntity<?> userProfile(@PathVariable Long userId){
 		
 		Optional<User> userOptional = userRepository.findById(userId);
 		
@@ -210,7 +210,7 @@ public class UserController {
 		
 		User user = userOptional.get();
 		
-		UserDTO userDTO = new UserDTO(user);
+		UserDTO userDTO = new UserDTO(user, following(user.getId()), followers(user.getId()));
 		
 		return ResponseEntity.ok(userDTO);
 	}

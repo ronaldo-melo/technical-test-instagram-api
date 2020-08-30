@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 
 @Entity
@@ -27,10 +28,12 @@ public class User {
 	@NotNull
 	@Column
 	private String userName;
-
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "followedUser", fetch = FetchType.LAZY)
-	private List<FollowedUser> Followers = new ArrayList<>();
-
+	private List<FollowedUser> followers = new ArrayList<>();
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "followerUser", fetch = FetchType.LAZY)
 	private List<FollowerUser> following = new ArrayList<>();
 
@@ -59,12 +62,12 @@ public class User {
 		this.userName = userName;
 	}
 
-	public List<FollowedUser> getFollowers() {
-		return Followers;
+	public List<FollowedUser> getfollowers() {
+		return followers;
 	}
 
-	public void setFollowers(List<FollowedUser> followers) {
-		Followers = followers;
+	public void setfollowers(List<FollowedUser> followers) {
+		this.followers = followers;
 	}
 
 	public List<FollowerUser> getFollowing() {
